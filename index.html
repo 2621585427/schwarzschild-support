@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050607">
+  <title>Schwarzschild Support</title>
+  <link rel="icon" href="./app-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="./app-icon.png" alt="">
+      <div><strong>Schwarzschild</strong><small>Black Hole Simulator</small></div>
+    </div>
+    <nav>
+      <a href="./index.html">Support</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+      <a href="./licenses.html">Licenses</a>
+      <button class="lang" type="button" id="lang">中文</button>
+    </nav>
+  </header>
+  <main>
+    <section data-lang="en">
+      <h1>A window into curved spacetime.</h1>
+      <p class="lede">Help with purchases, device compatibility, and the interactive Schwarzschild visualization.</p>
+      <div class="grid">
+        <article class="card">
+          <h2>Restore VIP</h2>
+          <p>Open the app's help panel and choose Restore purchases. Use the same Apple ID that originally purchased VIP.</p>
+        </article>
+        <article class="card">
+          <h2>Refunds</h2>
+          <p>Apple processes all purchases and refunds. Use Apple's Report a Problem service for a refund request.</p>
+        </article>
+        <article class="card">
+          <h2>Performance</h2>
+          <p>The renderer may lower its internal ray resolution during thermal throttling while keeping the controls sharp.</p>
+        </article>
+      </div>
+      <div class="card">
+        <h2>Contact</h2>
+        <p>Include your device model, iOS version, and a short description of what happened.</p>
+        <a class="button" href="mailto:hyacinth_1027@qq.com?subject=Schwarzschild%20Support">hyacinth_1027@qq.com</a>
+      </div>
+    </section>
+    <section data-lang="zh" lang="zh-CN">
+      <h1>一扇观察弯曲时空的窗口。</h1>
+      <p class="lede">获取购买恢复、设备兼容和史瓦西黑洞交互可视化相关帮助。</p>
+      <div class="grid">
+        <article class="card">
+          <h2>恢复 VIP</h2>
+          <p>打开 App 的帮助面板并选择“恢复购买”。请使用最初购买 VIP 时所用的 Apple ID。</p>
+        </article>
+        <article class="card">
+          <h2>退款</h2>
+          <p>所有购买和退款均由 Apple 处理。请通过 Apple 的“报告问题”服务提交退款申请。</p>
+        </article>
+        <article class="card">
+          <h2>性能</h2>
+          <p>设备发热降频时，渲染器可能降低内部光线分辨率，但界面和控件仍保持清晰。</p>
+        </article>
+      </div>
+      <div class="card">
+        <h2>联系我们</h2>
+        <p>请在邮件中说明设备型号、iOS 版本和问题现象。</p>
+        <a class="button" href="mailto:hyacinth_1027@qq.com?subject=Schwarzschild%20%E7%94%A8%E6%88%B7%E6%94%AF%E6%8C%81">hyacinth_1027@qq.com</a>
+      </div>
+    </section>
+  </main>
+  <footer>© 2026 Schwarzschild: Black Hole Simulator</footer>
+  <script>
+    const root = document.documentElement;
+    const button = document.getElementById('lang');
+    const stored = localStorage.getItem('support-language');
+    root.lang = stored || (navigator.language.startsWith('zh') ? 'zh-CN' : 'en');
+    const sync = () => { button.textContent = root.lang === 'zh-CN' ? 'EN' : '中文'; };
+    button.addEventListener('click', () => {
+      root.lang = root.lang === 'zh-CN' ? 'en' : 'zh-CN';
+      localStorage.setItem('support-language', root.lang);
+      sync();
+    });
+    sync();
+  </script>
+</body>
+</html>
