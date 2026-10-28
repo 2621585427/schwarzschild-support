@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Privacy Policy — Schwarzschild</title>
+  <link rel="icon" href="./app-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header><nav><a href="./index.html">← Support</a><button class="lang" type="button" id="lang">中文</button></nav></header>
+  <main>
+    <section data-lang="en">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Effective October 27, 2026</p>
+      <p class="lede">Your observations stay on your device.</p>
+      <div class="card">
+        <p>This app does not require an account and does not collect, transmit, sell, or share personal data.</p>
+        <p>Simulation settings and interface preferences are stored locally by the app. Purchases are processed by Apple through StoreKit; the developer does not receive your payment card details.</p>
+        <p>The app contains no advertising, analytics, tracking SDKs, or third-party telemetry. If you email support, the information you voluntarily include is used only to answer your request.</p>
+        <p>Apple may collect diagnostics and purchase information under Apple's own privacy policy.</p>
+      </div>
+      <h2>Contact</h2>
+      <p><a href="mailto:hyacinth_1027@qq.com?subject=Schwarzschild%20Privacy">hyacinth_1027@qq.com</a></p>
+    </section>
+    <section data-lang="zh" lang="zh-CN">
+      <h1>隐私政策</h1>
+      <p class="updated">生效日期：2026 年 10 月 27 日</p>
+      <p class="lede">你的观测数据只保留在设备上。</p>
+      <div class="card">
+        <p>本 App 无需账号，不收集、不传输、不出售也不共享个人数据。</p>
+        <p>模拟参数和界面偏好仅保存在本机。购买通过 Apple StoreKit 处理，开发者不会获得你的支付卡信息。</p>
+        <p>App 不包含广告、分析服务、追踪 SDK 或第三方遥测。若你发送客服邮件，邮件中主动提供的信息仅用于回复你的问题。</p>
+        <p>Apple 可能依据其隐私政策收集诊断和购买信息。</p>
+      </div>
+      <h2>联系方式</h2>
+      <p><a href="mailto:hyacinth_1027@qq.com?subject=Schwarzschild%20%E9%9A%90%E7%A7%81">hyacinth_1027@qq.com</a></p>
+    </section>
+  </main>
+  <footer>© 2026 Schwarzschild: Black Hole Simulator</footer>
+  <script>
+    const root=document.documentElement,button=document.getElementById('lang');
+    root.lang=localStorage.getItem('support-language')||(navigator.language.startsWith('zh')?'zh-CN':'en');
+    const sync=()=>button.textContent=root.lang==='zh-CN'?'EN':'中文';
+    button.onclick=()=>{root.lang=root.lang==='zh-CN'?'en':'zh-CN';localStorage.setItem('support-language',root.lang);sync();};sync();
+  </script>
+</body>
+</html>
