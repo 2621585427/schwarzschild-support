@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Terms of Use — Schwarzschild</title>
+  <link rel="icon" href="./app-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header><nav><a href="./index.html">← Support</a><button class="lang" type="button" id="lang">中文</button></nav></header>
+  <main>
+    <section data-lang="en">
+      <h1>Terms of Use</h1>
+      <p class="updated">Effective October 27, 2026</p>
+      <div class="card">
+        <p>This app provides an interactive visualization for education and exploration. It uses an idealized Schwarzschild model and an artistic accretion-disk treatment. It is not a research-grade GRMHD simulator and must not be used for navigation, safety, financial, or operational decisions.</p>
+        <p>VIP is a one-time non-consumable purchase. It does not expire, does not renew automatically, and includes Cinematic quality, Board Vessel, and future premium features released within this app. Family Sharing is disabled. Refund and revocation handling follows Apple's policies.</p>
+        <p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple Standard End User License Agreement</a></p>
+      </div>
+    </section>
+    <section data-lang="zh" lang="zh-CN">
+      <h1>使用条款</h1>
+      <p class="updated">生效日期：2026 年 10 月 27 日</p>
+      <div class="card">
+        <p>本 App 提供用于教育和探索的交互式可视化体验。它采用理想化史瓦西黑洞模型和艺术化吸积盘表现，不是研究级 GRMHD 模拟，不可用于导航、安全、金融或实际运行决策。</p>
+        <p>VIP 为一次性非消耗型购买，不会过期，也不会自动续费，包含电影级画质、飞船视角以及本 App 后续发布的高级功能。家人共享已关闭。退款与交易撤销遵循 Apple 的政策。</p>
+        <p><a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple 标准最终用户许可协议</a></p>
+      </div>
+    </section>
+  </main>
+  <footer>© 2026 Schwarzschild: Black Hole Simulator</footer>
+  <script>
+    const root=document.documentElement,button=document.getElementById('lang');
+    root.lang=localStorage.getItem('support-language')||(navigator.language.startsWith('zh')?'zh-CN':'en');
+    const sync=()=>button.textContent=root.lang==='zh-CN'?'EN':'中文';
+    button.onclick=()=>{root.lang=root.lang==='zh-CN'?'en':'zh-CN';localStorage.setItem('support-language',root.lang);sync();};sync();
+  </script>
+</body>
+</html>
