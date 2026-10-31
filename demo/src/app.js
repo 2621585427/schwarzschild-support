@@ -122,7 +122,7 @@ async function toggleAudio(){
   $('audio-status').textContent=t(soundOn?'AUDIO ON':'AUDIO OFF');$('sound').setAttribute('aria-pressed',soundOn);$('sound').setAttribute('aria-label',t(soundOn?'Mute ambient audio':'Enable ambient audio'));toast(soundOn?'Ambient signal enabled':'Ambient signal muted');
 }
 async function fullscreen(){if(requestNativeFullscreen())return;try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('Fullscreen is not available in this browser.');}}
-function snapshot(){return {version:'2.1.0',language:getLanguage(),...experience?.state(),params:{...params},quality,preset,mode,playing,time:simTime,debug,frames,ready:frames>0&&!contextLost&&!fatal&&(query.get('ship')!=='1'||!!experience?.vessel.loaded),contextLost,restores,soundOn,camera:camera.position.toArray(),render:pipeline?.info,vip:initialVipState(),error:fatal};}
+function snapshot(){return {version:'2.2.0',language:getLanguage(),...experience?.state(),params:{...params},quality,preset,mode,playing,time:simTime,debug,frames,ready:frames>0&&!contextLost&&!fatal&&(query.get('ship')!=='1'||!!experience?.vessel.loaded),contextLost,restores,soundOn,camera:camera.position.toArray(),render:pipeline?.info,vip:initialVipState(),error:fatal};}
 function render(){
   if(contextLost||!pipeline||fatal)return;
   if(mode==='cinema'&&!experience?.ship.enabled&&!experience?.transition){
