@@ -1,0 +1,4 @@
+Event Horizon — original procedural ambient composition, generated for this project.
+Copyright 2026. Released under CC0 1.0 Universal (public domain dedication).
+The source score/synthesizer is tools/generate-audio.mjs. No third-party recordings used.
+24 seconds; stereo PCM, 16-bit, 22050 Hz; periodic seamless loop. Playback is opt-in.

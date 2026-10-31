@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090a0b">
+  <meta name="description" content="An interactive Schwarzschild black hole. Every pixel follows a curved path through spacetime.">
+  <title>Schwarzschild — Black Hole Simulator</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/upgrade.css">
+  <link rel="stylesheet" href="./src/console.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}</script>
+</head>
+<body>
+  <main id="universe" aria-label="Interactive Schwarzschild black hole visualization">
+    <canvas id="cosmos" aria-label="Raytraced black hole. Drag to orbit, scroll to zoom." tabindex="0"></canvas>
+    <section id="opening" hidden aria-label="Opening sequence">
+      <div class="opening-grid"></div><div class="opening-orbit"><i></i><i></i><i></i><b>λ</b></div>
+      <div class="opening-top"><span>SCHWARZSCHILD / OBSERVATORY 01</span><span id="intro-elapsed">T+00:00.0</span></div>
+      <div class="opening-title"><span>DEEP FIELD OBSERVATORY</span><h2>SCHWARZSCHILD</h2><p>LIGHT FINDS ITS LAST ORBIT.</p><small>u″ + u = 3u² / 2 <i>·</i> b<sub>crit</sub> = 2.598 r<sub>s</sub></small></div>
+      <div class="opening-bottom"><div><span id="intro-status">INITIALIZING OPTICAL PATH</span><div class="opening-progress"><i id="intro-progress"></i></div><small>CALIBRATION</small></div><button id="intro-skip">Skip sequence <b>↗</b></button></div>
+    </section>
+    <div id="ship-hud" hidden><div class="ship-top"><span>SCHWARZSCHILD / ORBITAL VESSEL</span><div><button id="ship-language" aria-label="Language">中文 / EN</button><button id="ship-controls">Controls</button><button id="ship-immersive">IMMERSIVE</button><button id="ship-exit">Observer view <b>↗</b></button></div></div><div class="ship-target"><i></i><i></i><span>+</span></div><div class="ship-bottom"><div><span>FREE LOOK / DRAG · DOUBLE CLICK TO CENTER</span><b id="ship-look-readout">YAW 000° · PITCH 000°</b></div><div><span>HULL INTEGRITY</span><b>98.6 %</b></div><div><span id="ship-telemetry">R 6.00 rₛ</span><b id="ship-state">ORBIT STABILIZED</b></div></div></div>
+    <button id="immersive-exit" hidden>Exit immersive <kbd>ESC</kbd></button>
+    <div id="loading" role="status"><span class="loader-orbit"></span><b>SCHWARZSCHILD</b><span>Tracing the curvature of spacetime</span></div>
+    <div id="error" role="alert" hidden><b>Signal interrupted</b><p id="error-message"></p><button id="retry">Reconnect</button></div>
+    <div class="ui">
+      <header class="brand-block">
+        <div class="brand-rule"><span></span><i></i></div>
+        <p class="eyebrow">DEEP FIELD OBSERVATION / SCHWARZSCHILD METRIC</p>
+        <h1>SCHWARZSCHILD</h1>
+        <p class="brand-subtitle">SCHWARZSCHILD BLACK HOLE RAYTRACER</p>
+        <p class="brand-copy">Light completes its final orbit at the edge of the event horizon.</p>
+      </header>
+
+      <div class="top-controls">
+        <div class="quality-switch" id="quality" role="group" aria-label="Render quality"><button data-quality="standard">Standard</button><button data-quality="high" class="active">High</button><button data-quality="cinematic" data-vip-feature="cinematic">Cinematic</button></div>
+        <button id="language" class="round-button language-button" aria-label="Language">EN</button>
+        <button id="info" class="round-button" aria-label="About this simulation" title="About & shortcuts · ?">?</button>
+        <button id="fullscreen" class="round-button" aria-label="Enter fullscreen" title="Fullscreen · F"><svg viewBox="0 0 18 18"><path d="M2 7V2h5M11 2h5v5M16 11v5h-5M7 16H2v-5"/></svg></button>
+      </div>
+
+      <div class="telemetry telemetry-panel">
+        <div class="telemetry-heading"><i class="signal-dot"></i><span>LIVE RENDER</span><strong id="debug-label">VIEW 00</strong></div>
+        <div class="telemetry-grid">
+          <div><span>FPS</span><b id="fps">—</b></div><div><span>FRAME</span><b id="frame-ms">— ms</b></div><div><span>RESOLUTION</span><b id="resolution">—</b></div>
+          <div><span>GEODESIC</span><b id="step-readout">640</b></div><div><span>CAMERA</span><b id="camera-distance">27.0 rₛ</b></div><div><span>QUALITY</span><b id="quality-label">HIGH</b></div>
+        </div>
+      </div>
+
+      <aside id="panel" class="control-deck" aria-label="Simulation controls">
+        <div class="panel-heading deck-header">
+          <div class="deck-title"><span class="deck-index">OBSERVATORY / <b id="view-number">01</b></span><h2>Observation console</h2><p>28 black hole parameters + 4 vessel parameters</p></div>
+          <div class="deck-header-actions"><span class="render-chip"><i></i> REALTIME</span><button id="toggle-panel" class="round-button small" aria-label="Toggle controls" aria-controls="deck-body" aria-expanded="true" title="Toggle controls · P">−</button></div>
+        </div>
+        <div id="deck-body" class="deck-body">
+          <div class="action-row">
+            <button id="play" class="action-button" aria-label="Pause simulation" title="Play / pause · Space"><svg id="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10"/></svg><span id="play-label">Freeze time</span></button>
+            <button id="cruise" class="action-button" title="Cinematic cruise">Cruise</button>
+            <button id="immersive" class="action-button" title="Immersive mode">Immersive</button>
+            <button id="reset" class="action-button" title="Reset parameters">Reset</button>
+            <button id="sound" class="action-button icon-action" aria-label="Enable ambient audio" aria-pressed="false" title="Ambient audio · M">◌</button>
+            <button id="capture" class="action-button icon-action" aria-label="Save PNG" title="Save PNG">⌁</button>
+          </div>
+          <section class="ship-console vessel-controls" aria-label="Vessel orbit controls">
+            <div class="ship-console-head"><div><span>ORBITAL VESSEL / 600 m</span><b>Observation vessel</b></div><button id="ship-toggle" class="action-button ship-view-button" aria-pressed="false" data-vip-feature="vessel">Board vessel</button></div>
+            <div id="ship-parameters" class="ship-parameter-grid"></div>
+            <div class="ship-console-footer"><span id="ship-orbit-state">VESSEL STANDBY</span><span id="ship-orbit-readout">R 6.00 rₛ</span></div>
+          </section>
+          <div class="parameters parameter-groups" id="parameters"></div>
+          <details class="parameter-group additional-controls"><summary><span class="group-index">+</span><span>Additional views</span></summary><div class="camera-section">
+            <div class="segmented" id="camera-mode"><button data-mode="cinema" class="active" aria-pressed="true">Cinema</button><button data-mode="orbit" aria-pressed="false">Free orbit</button></div>
+            <div class="presets" aria-label="Additional views"><button data-preset="hero" class="active"><span>01</span>Classic</button><button data-preset="edge"><span>02</span>Edge-on</button><button data-preset="close"><span>03</span>Close</button></div>
+            <button id="intro-replay" class="action-button" title="Replay intro">Replay intro <kbd>I</kbd></button>
+          </div></details>
+          <div class="deck-footer"><span id="status">INTEGRATING NULL GEODESICS</span><span id="audio-status">AUDIO OFF</span></div>
+        </div>
+      </aside>
+
+      <nav id="preset-dock" class="preset-dock" aria-label="Camera presets"></nav>
+      <div class="debug-chip"><label for="debug">DEBUG</label><select id="debug" aria-label="Diagnostic view"></select></div>
+      <div class="shortcut-hint"><span><kbd>0–9</kbd> DEBUG</span><span><kbd>⇧1–4</kbd> CAMERA</span><span><kbd>H</kbd> HUD</span><span><kbd>L</kbd> LOOP</span><span><kbd>V</kbd> SHIP</span><span><kbd>I</kbd> INTRO</span><span><kbd>?</kbd> HELP</span></div>
+      <div class="observation-clock"><span id="clock">00:00:00</span><span>SIMULATION TIME</span></div>
+    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="about"><button class="dialog-close" aria-label="Close about dialog">×</button><span class="eyebrow">A SMALL WINDOW INTO THE EXTREME</span><h2>Nothing escapes.<br>Except your curiosity.</h2><p>Every pixel is a photon traced backwards along a Schwarzschild null geodesic. Light can circle the photon sphere, cross the accretion disk repeatedly, or disappear through the event horizon.</p><p>The disk and the sky are entirely procedural. Orbital Doppler shifts and gravitational redshift transform the emitted light. This is a non-rotating, idealized black hole; the animated disk is an artistic radiative model, not a GRMHD simulation.</p><div class="facts"><span>EVENT HORIZON<b>1.0 r<sub>s</sub></b></span><span>PHOTON SPHERE<b>1.5 r<sub>s</sub></b></span><span>STABLE ORBIT / ISCO<b>3.0 r<sub>s</sub></b></span></div><div class="shortcuts"><span><kbd>Space</kbd> Pause / resume</span><span><kbd>C</kbd> Cinema / orbit</span><span><kbd>0–9</kbd> Diagnostic views</span><span><kbd>Shift 1–4</kbd> Camera presets</span><span><kbd>H</kbd> Hide HUD</span><span><kbd>P</kbd> Toggle controls</span><span><kbd>M</kbd> Ambient audio</span><span><kbd>S</kbd> Save PNG</span><span><kbd>F</kbd> Fullscreen</span><span><kbd>R</kbd> Reset parameters</span></div><div class="about-actions"><button id="restore-purchases" hidden>Restore purchases</button><button id="privacy-link" hidden>Privacy policy</button><button id="support-link" hidden>Support</button></div><p class="about-note">Distance and time are expressed in Schwarzschild units. Display colors, emission and camera motion are curated for exploration. Drag or pinch to take control.</p></dialog>
+    <noscript><div class="noscript">Schwarzschild needs JavaScript and WebGL 2 to trace light. Enable JavaScript and reload.</div></noscript>
+  </main>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
